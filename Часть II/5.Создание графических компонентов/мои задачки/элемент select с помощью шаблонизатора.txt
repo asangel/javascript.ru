@@ -66,3 +66,80 @@
 
 </body>
 </html>
+
+
+
+//----------------------------------------------------------------------
+
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+    <title>Document</title>
+
+    <script src="lodash.js"></script>
+
+    <script type="text/template" id="template-select">
+
+        <select>
+
+            <% for(var option in options ) { %>
+                <option value= "<%= options[option] %>" ><%= option %></option>
+            <% } %>
+
+        </select>
+
+    </script>
+
+</head>
+<body>
+
+<script>
+
+    function SelectElement(options) {
+        
+        var elem;
+        
+        function render() {
+            var html = options.template(options.items);
+            elem = document.createElement('DIV');
+            elem.innerHTML = html;
+
+            elem.addEventListener('change', options.onchange);
+
+        }
+
+        function  getElem() {
+            if(!elem) render();
+            return elem;
+        }
+
+        this.getElem = getElem;
+
+    }
+
+    function changeValue () {
+        var event = arguments[0];
+        var target = event.target;
+        if(target.closest('SELECT')){
+            alert('Вы выбрали: ' + target.options[target.selectedIndex].value);
+        }
+        target.tagName;
+    }
+
+    var tmplt = _.template(document.getElementById('template-select').innerHTML);
+    var items = {options: {PHP: 'PHP', Java: 'Java', JS: 'Java script'}};
+
+    var select = new SelectElement({template: tmplt, items: items, onchange: changeValue});
+    document.body.appendChild(select.getElem());
+
+</script>
+
+
+</body>
+</html>
+
+
+
+
