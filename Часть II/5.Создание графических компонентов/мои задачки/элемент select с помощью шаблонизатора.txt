@@ -1,0 +1,68 @@
+﻿<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+
+    <title>Document</title>
+
+    <script src="lodash.js"></script>
+
+    <script type="text/template" id="template-select">
+
+        <select>
+
+            <% for(var option in options ) { %>
+                <option value= "<%= options[option] %>" ><%= option %></option>
+            <% } %>
+
+        </select>
+
+    </script>
+
+</head>
+<body>
+
+<script>
+
+    function SelectElement(options) {
+        
+        var elem;
+        
+        function render() {
+            //alert(options.template);
+            var html = options.template(options.items);
+            elem = document.createElement('DIV');
+            elem.innerHTML = html;
+
+            elem.addEventListener('change', function (event) {
+
+                var target = event.target;
+                if(target.closest('SELECT')){
+                    alert('Вы выбрали: ' + target.options[target.selectedIndex].value);
+                }
+                target.tagName;
+            });
+
+        }
+
+        function  getElem() {
+            if(!elem) render();
+            //alert(elem.innerHTML)
+            return elem;
+        }
+
+        this.getElem = getElem;
+
+    }
+
+    var tmplt = _.template(document.getElementById('template-select').innerHTML);
+    var items = {options: {PHP: 'PHP', Java: 'Java', JS: 'Java script'}};
+
+    var select = new SelectElement({template: tmplt, items: items});
+
+    document.body.appendChild(select.getElem());
+
+</script>
+
+
+</body>
+</html>
