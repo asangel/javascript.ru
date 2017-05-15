@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    <style>
+
+        table, td, tr, th {
+            border: 1px solid blue;
+            width: 15%;
+        }
+
+    </style>
+
+    <script src="lodash.js"></script>
+    <script type="text/template" id="table-template">
+        <table>
+
+            <% var rowArray = tbody.rowArray; %>
+            <% var titleLength = thead.length; %>
+            <% var rowsLength = rowArray.length %>
+            <thead>
+            <tr>
+                <% for(var i=0; i<titleLength ; i++ ) { %>
+                <th> <%= thead[i] %></th>
+                <% } %>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <% for(var i=0; i<rowsLength ; i++) { %>
+            <tr>
+                <td><%= rowArray[i].name %></td>
+                <td><%= rowArray[i].age %></td>
+            </tr>
+            <% } %>
+            </tbody>
+
+        </table>
+
+
+    </script>
+
+</head>
+<body>
+
+<div id="table-holder"></div>
+
+
+<script>
+
+    var title = ['name', 'age'];
+    var rows = [
+        {name: 'John', age: 40},
+        {name: 'Bille', age: 50},
+        {name: 'Ivan', age: 30}
+    ];
+
+    var tmplt = document.querySelector('#table-template').innerHTML;
+    tmplt = _.template(tmplt);
+    var html = tmplt({thead: title, tbody: {rowArray: rows}})
+
+
+    document.querySelector('#table-holder').insertAdjacentHTML('beforeEnd', html)
+
+</script>
+
+<script>
+
+    var table = document.querySelector('#table-holder table');
+
+
+    table.onclick = function (evt) {
+        var target = evt.target;
+
+        if (!target.closest('TH')) {
+            return;
+        }
+
+        var cellIndex = target.cellIndex;
+        var tbody = table.querySelector('tbody');
+        var rows = tbody.rows;
+
+        var rowsArray = Array.prototype.slice.call(rows);
+
+        rowsArray = Array.prototype.filter.call(rowsArray, function (row) {
+           return !isNaN(+row.lastElementChild.innerHTML);
+        });
+
+
+        var compare;
+
+        switch (cellIndex) {
+
+            case 0 :
+                compare = function (rowA, rowB) {
+                    return (rowA.cells[cellIndex].innerHTML) > (rowB.cells[cellIndex].innerHTML);
+                }
+                break;
+            case  1:
+                compare = function (rowA, rowB) {
+                    return (+rowA.cells[cellIndex].innerHTML) - (+rowB.cells[cellIndex].innerHTML);
+                }
+                break;
+
+        }
+
+
+        rowsArray = Array.prototype.sort.call(rowsArray, compare);
+
+
+        for (var i = 0; i < rowsArray.length; i++) {
+            table.querySelector('tbody').appendChild(rowsArray[i])
+        }
+
+
+    }
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+
+    var regexp = /^http:\/\/[a-z-_]+\.(ru|com|ua)/;
+    var url    = 'http://site-do.ru/index.php';
+
+    alert(regexp.exec(url)[0]);
