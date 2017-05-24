@@ -1,0 +1,39 @@
+    var $ = function (selector) {
+
+        if( (this||window).$ ) {
+            return new $(selector);
+        }
+
+        this.elem = document.querySelector(selector);
+
+        return this;
+
+
+    }
+
+    $.prototype.text = function (innerText) {
+        if(!this.elem || !innerText) return this;
+
+        if(this.elem) this.elem.innerHTML = innerText;
+
+        return this;
+
+    }
+
+    $.prototype.style = function (obj) {
+
+        if (typeof obj != 'object') return this;
+
+        for(var prop in obj){
+            if(!this.elem) break;
+            this.elem.style[prop] = obj[prop];
+        }
+
+        return this;
+    }
+
+    $('#mydiv').text('Yaaahoooo!').style({color:'blue', border:'2px solid red', width: '20%'});
+	
+	
+	
+	
